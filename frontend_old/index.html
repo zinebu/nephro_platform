@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Plateforme Médicale de Néphrologie</title>
+    <script>
+        async function predictRisk(e) {
+            e.preventDefault();
+        
+            const data = {
+                age: parseInt(document.getElementById('age').value),
+                creatinine: parseFloat(document.getElementById('creatinine').value),
+                eGFR: parseFloat(document.getElementById('eGFR').value),
+                blood_pressure: parseFloat(document.getElementById('blood_pressure').value),
+                diabetes: document.getElementById('diabetes').checked
+            };
+        
+            try {
+                const res = await fetch("/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                const json = await res.json();
+                document.getElementById("result").innerHTML = "Risque prédit : " + json.risk;
+            } catch (err) {
+                console.error(err);
+                document.getElementById("result").innerHTML = "Erreur lors de la prédiction.";
+            }
+        }
+        </script>
+        
+</head>
+<body>
+    <h1>Plateforme Médicale de Néphrologie</h1>
+    <form onsubmit="predictRisk(event)">
+        <label for="age">Âge :</label>
+        <input type="number" id="age" required><br><br>
+        
+        <label for="creatinine">Créatinine :</label>
+        <input type="number" step="0.01" id="creatinine" required><br><br>
+        
+        <label for="eGFR">eGFR :</label>
+        <input type="number" step="0.01" id="eGFR" required><br><br>
+        
+        <label for="blood_pressure">Tension artérielle :</label>
+        <input type="number" id="blood_pressure" required><br><br>
+        
+        <label for="diabetes">Diabète :</label>
+        <input type="checkbox" id="diabetes"><br><br>
+        
+        <button type="submit">Prédire le risque</button>
+    </form>
+    <div id="result"></div>
+</body>
+</html>
