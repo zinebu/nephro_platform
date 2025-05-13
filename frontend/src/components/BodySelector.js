@@ -1,96 +1,127 @@
-import React, { useState } from "react";
-import bodyImage from "../assets/corps.jpeg"; // remplace avec ton image
+import React, { useState, useEffect } from "react";
 
-export default function BodySelector({ onZoneClick }) {
-  const [selectedZone, setSelectedZone] = useState(null);
+const questions = [
+  { id: 1, text: "Bonjour ! Ressentez-vous une douleur au bas du dos ?", options: ["Aucune douleur", "Légère gêne", "Douleur modérée", "Douleur intense"] },
+  { id: 2, text: "Avez-vous remarqué un gonflement des chevilles ou des jambes ?", options: ["Non", "Parfois en fin de journée", "Souvent le matin", "Toujours gonflées"] },
+  { id: 3, text: "Votre urine a-t-elle changé de couleur ou d’odeur ?", options: ["Pas du tout", "Légère différence", "Changement notable", "Urine foncée ou malodorante"] },
+  { id: 4, text: "Ressentez-vous une fatigue excessive ces derniers temps ?", options: ["Non, je suis en forme", "Fatigue légère", "Fatigue fréquente", "Fatigue constante"] },
+  { id: 5, text: "Souffrez-vous de nausées ou de perte d’appétit ?", options: ["Non", "Nausées occasionnelles", "Perte d’appétit régulière", "Nausées fréquentes et perte d’appétit"] }
+];
 
-  const analysesParZone = {
-    coeur: ["ECG", "Troponine", "Pression artérielle"],
-    reins: ["Créatinine", "Urée", "Analyse d'urine"],
-    foie: ["ALAT", "ASAT", "Bilirubine"],
-    poumons: ["Gaz du sang", "Radio thoracique"],
-    cerveau: ["IRM", "Électroencéphalogramme"],
-    estomac: ["Fibroscopie", "pH-métrie"]
-  };
+const analysesSuggerees = [
+  "Créatinine",
+  "Urée",
+  "Analyse d'urine complète",
+  "Débit de filtration glomérulaire (DFG)",
+  "Protéinurie"
+];
 
-  const descriptions = {
-    coeur: "Le cœur pompe le sang et peut être douloureux en cas de problème cardiaque.",
-    reins: "Les reins filtrent le sang. Des douleurs lombaires peuvent indiquer une atteinte.",
-    foie: "Le foie aide à métaboliser et éliminer les toxines. Douleurs sous les côtes ?",
-    poumons: "Les poumons permettent la respiration. Difficulté à respirer ou douleur thoracique ?",
-    cerveau: "Le cerveau contrôle tout le corps. Céphalées ? Perte de mémoire ?",
-    estomac: "L’estomac digère les aliments. Douleurs abdominales ? Reflux ?"
-  };
+export default function RenalSymptomChat({ onContinue }) {
+  const [step, setStep] = useState(-1);
+  const [chat, setChat] = useState([]);
+  const [writing, setWriting] = useState(false);
+  const [responses, setResponses] = useState({});
+  const [showResults, setShowResults] = useState(false);
 
-  const handleClick = (zone) => {
-    setSelectedZone(zone);
+  useEffect(() => {
+    if (step === -1) {
+      setWriting(true);
+      setTimeout(() => {
+        setChat([{ type: "bot", text: "Bonjour ! Je vais vous poser quelques questions." }]);
+        setWriting(false);
+        setTimeout(() => setStep(0), 500);
+      }, 800);
+    } else if (step < questions.length && !writing) {
+      setWriting(true);
+      setTimeout(() => {
+        setChat(prev => [...prev, { type: "bot", text: questions[step].text }]);
+        setWriting(false);
+      }, 600);
+    }
+  }, [step]);
+
+  const handleUserResponse = (answer) => {
+    const currentQuestion = questions[step];
+    setResponses(prev => ({ ...prev, [currentQuestion.id]: answer }));
+    setChat(prev => [...prev, { type: "user", text: answer }]);
+    if (step + 1 < questions.length) {
+      setStep(step + 1);
+    } else {
+      setShowResults(true);
+    }
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "2rem" }}>
-      <h2>🩺 Où avez-vous mal ?</h2>
+    <div style={{ maxWidth: "600px", margin: "2rem auto", padding: "1rem", backgroundColor: "#f2f5f8", borderRadius: "1rem", fontFamily: "Arial" }}>
+      <h2 style={{ textAlign: "center" }}>👩‍⚕️ Assistant Santé Rénale</h2>
 
-      <div style={{ position: "relative", width: "400px", margin: "1rem auto" }}>
-        <img src={bodyImage} alt="Corps humain" style={{ width: "100%" }} />
-
-        {/* Boutons zones */}
-        <ZoneButton top="25%" left="45%" title="Cœur" onClick={() => handleClick("coeur")} />
-        <ZoneButton top="45%" left="40%" title="Reins" onClick={() => handleClick("reins")} />
-        <ZoneButton top="40%" left="42%" title="Foie" onClick={() => handleClick("foie")} />
-        <ZoneButton top="20%" left="38%" title="Poumons" onClick={() => handleClick("poumons")} />
-        <ZoneButton top="5%" left="44%" title="Cerveau" onClick={() => handleClick("cerveau")} />
-        <ZoneButton top="38%" left="46%" title="Estomac" onClick={() => handleClick("estomac")} />
+      <div style={{ backgroundColor: "white", borderRadius: "0.5rem", padding: "1rem", minHeight: "300px", marginBottom: "1rem", boxShadow: "0 0 10px rgba(0,0,0,0.05)" }}>
+        {chat.map((msg, idx) => (
+          <div key={idx} style={{ textAlign: msg.type === "bot" ? "left" : "right", marginBottom: "0.5rem" }}>
+            <div style={{
+              display: "inline-block",
+              padding: "10px",
+              borderRadius: "1rem",
+              backgroundColor: msg.type === "bot" ? "#e0f0ff" : "#c7ffc7",
+              maxWidth: "75%"
+            }}>
+              {msg.text}
+            </div>
+          </div>
+        ))}
+        {writing && <p>Assistant est en train d’écrire...</p>}
       </div>
 
-      {/* Affichage dynamique */}
-      {selectedZone && (
-        <div style={{ marginTop: "2rem", animation: "fadeIn 0.5s ease-in-out" }}>
-          <h3>🧠 Vous avez cliqué sur : <strong>{selectedZone.toUpperCase()}</strong></h3>
-          <p>{descriptions[selectedZone]}</p>
+      {!showResults && !writing && step >= 0 && step < questions.length && (
+        <div style={{ textAlign: "center" }}>
+          {questions[step].options.map((label) => (
+            <button
+              key={label}
+              onClick={() => handleUserResponse(label)}
+              style={{
+                margin: "0.3rem",
+                padding: "0.5rem 1rem",
+                border: "none",
+                borderRadius: "20px",
+                backgroundColor: "#007bff",
+                color: "white",
+                cursor: "pointer",
+                display: "block",
+                width: "80%",
+                marginLeft: "auto",
+                marginRight: "auto"
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
 
-          <h4>🔍 Analyses suggérées :</h4>
+      {showResults && (
+        <div>
+          <h3>🔍 D’après vos réponses, voici les analyses recommandées :</h3>
           <ul>
-            {analysesParZone[selectedZone].map((analyse, idx) => (
-              <li key={idx}>{analyse}</li>
+            {analysesSuggerees.map((a, i) => (
+              <li key={i}>✅ {a}</li>
             ))}
           </ul>
-
           <button
+            onClick={onContinue}
             style={{
-              marginTop: "1rem",
-              padding: "10px 20px",
-              backgroundColor: "#007bff",
+              marginTop: "1.5rem",
+              padding: "12px 25px",
+              backgroundColor: "#28a745",
               color: "white",
               border: "none",
               borderRadius: "5px",
               cursor: "pointer"
             }}
-            onClick={() => onZoneClick(selectedZone)}
           >
-            ✅ Analyses déjà faites
+            J’ai fait ces analyses
           </button>
         </div>
       )}
     </div>
-  );
-}
-
-// Petit composant de zone réutilisable
-function ZoneButton({ top, left, title, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      title={title}
-      style={{
-        position: "absolute",
-        top,
-        left,
-        width: "10%",
-        height: "7%",
-        background: "rgba(255, 0, 0, 0.3)",
-        border: "none",
-        cursor: "pointer"
-      }}
-    />
   );
 }
