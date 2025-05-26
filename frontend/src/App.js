@@ -71,21 +71,12 @@ export default function App() {
 
   // 📌 Étapes
   if (step === "welcome") {
-    return <Welcome onStart={() => setStep("body")} />;
-  }
+  return <Welcome onStart={() => setStep("assistant")} />;
+}
 
-  if (step === "body") {
-    return (
-      <BodySelector
-        onZoneClick={(zone) => {
-          console.log("Zone cliquée :", zone);
-          setSelectedZone(zone); // (utile plus tard pour analyses recommandées)
-          setStep("form");
-        }}
-      />
-    );
-  }
-
+if (step === "assistant") {
+  return <BodySelector onDone={() => setStep("form")} />;
+}
   // 📝 Formulaire
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial" }}>

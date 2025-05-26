@@ -1,42 +1,28 @@
-import os
-import traceback
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Dict, Any
 from fastapi.middleware.cors import CORSMiddleware
+import traceback
 
-from ai import predict_risk  # ✅ ton modèle ML (fichier ai.py)
+app = FastAPI()
 
-app = FastAPI(title="Plateforme Médicale de Néphrologie")
-
-# ✅ Autoriser React
+# Middleware pour autoriser les appels depuis React (port 3000, etc.)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # à restreindre à ["http://localhost:3000"] si nécessaire
-    allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
 
-# 🔮 Prediction ML
+# Modèle pour /predict
 class PatientInput(BaseModel):
     data: Dict[str, Any]
 
-@app.post("/predict")
-def predict(input: PatientInput):
-    print("✅ Données reçues :", input.data)
-    try:
-        result = predict_risk(input.data)
-        print("🎯 Résultat du modèle :", result)
-        return result
-    except Exception as e:
-        traceback.print_exc()
-        return {"proba": None, "error": str(e)}
-
-# 🩺 Assistant médical (symptômes -> maladies possibles)
+# Modèle pour /assistant
 class AssistantInput(BaseModel):
     symptoms: List[str]
 
+# Base de données de symptômes
 SYMPTOMS_ANALYSES = {
     "Glomérulonéphrite": {
         "symptoms": [
@@ -68,25 +54,23 @@ SYMPTOMS_ANALYSES = {
 def assistant(input: AssistantInput):
     try:
         symptoms = input.symptoms
-        print("🧾 Symptômes reçus :", symptoms)
-
         if not symptoms:
             return {"message": "Aucun symptôme fourni."}
 
         possible_diseases = []
-        for disease, info in SYMPTOMS_ANALYSES.items():
-            matching = list(set(symptoms) & set(info["symptoms"]))
+        for disease, details in SYMPTOMS_ANALYSES.items():
+            matching = list(set(symptoms) & set(details["symptoms"]))
             if matching:
+                missing_analyses = details["analyses"]
                 possible_diseases.append({
                     "disease": disease,
                     "matching_symptoms": matching,
-                    "required_analyses": info["analyses"]
+                    "required_analyses": missing_analyses
                 })
 
         if possible_diseases:
-            print("🔎 Maladies détectées :", [d['disease'] for d in possible_diseases])
             return {
-                "message": f"{len(possible_diseases)} maladie(s) trouvée(s).",
+                "message": f"{len(possible_diseases)} maladie(s) trouvée(s) basée(s) sur vos symptômes.",
                 "possible_diseases": possible_diseases
             }
         else:
@@ -97,3 +81,13 @@ def assistant(input: AssistantInput):
     except Exception as e:
         traceback.print_exc()
         return {"error": str(e)}
+
+@app.post("/predict")
+def predict(input: PatientInput):
+    print("✅ Données reçues :", input.data)
+    try:
+        # Remplace ceci par ton vrai modèle ML
+        return {"proba": 0.87, "prediction": "Glomérulonéphrite"}
+    except Exception as e:
+        traceback.print_exc()
+        return {"proba": None, "error": str(e)}
