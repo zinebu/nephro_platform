@@ -1,73 +1,64 @@
 import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.impute import SimpleImputer
-from sklearn.metrics import classification_report
 from sklearn.preprocessing import LabelEncoder
-from sklearn.utils.multiclass import unique_labels
-from xgboost import XGBClassifier
-import pickle
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# 1. Charger le fichier enrichi avec cas équilibrés
+# 1. Charger le dataset
 df = pd.read_excel("data/kidney_disease.xlsx")
 
-# 2. Encoder la cible (nom de diagnostic) → label numérique
-le_target = LabelEncoder()
-df["diagnostic_class"] = le_target.fit_transform(df["diagnostic_nom"])
+# 2. Extraire y (cible) et classification (colonne supplémentaire)
+y = df["diagnostic_nom"]
+classification = df["classification"]
 
-# 3. Supprimer colonnes inutiles
-df.drop(columns=["diagnostic_nom", "classification"], inplace=True, errors="ignore")
+# 3. Extraire les features (toutes sauf y et classification)
+X = df.drop(["diagnostic_nom", "classification"], axis=1)
 
-# 4. Séparer X et y
-X = df.drop(columns=["diagnostic_class"])
-y = df["diagnostic_class"]
+# 4. Encoder y
+le = LabelEncoder()
+y_encoded = le.fit_transform(y)
 
-# Supprimer les classes avec < 2 instances (stratify exige au moins 2 exemples)
-counts = y.value_counts()
-valid_classes = counts[counts >= 2].index
-mask = y.isin(valid_classes)
-X = X[mask]
-y = y[mask]
-
-# 5. Imputation et mise à l’échelle
-imputer = SimpleImputer(strategy="mean")
-X_imputed = imputer.fit_transform(X)
-
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X_imputed)
-
-# 6. Split des données
+# 5. Split train/test (garder les index pour retrouver classification sur test)
 X_train, X_test, y_train, y_test = train_test_split(
-    X_scaled, y, test_size=0.2, stratify=y, random_state=42
+    X, y_encoded, test_size=0.2, random_state=42, stratify=y_encoded
 )
 
-# 7. Entraînement du modèle XGBoost
-model = XGBClassifier(
-    use_label_encoder=False,
-    eval_metric="mlogloss",  # adapté pour la classification multi-classe
-    n_estimators=150,
-    learning_rate=0.1,
-    max_depth=4,
-    random_state=42
-)
-model.fit(X_train, y_train)
+# 6. Pipeline Random Forest (imputation + RF)
+rf_pipeline = Pipeline([
+    ("imputer", SimpleImputer(strategy="mean")),
+    ("rf", RandomForestClassifier(n_estimators=100, random_state=42))
+])
 
-# 8. Évaluation
-y_pred = model.predict(X_test)
-labels = unique_labels(y_test, y_pred)
-target_names = [le_target.classes_[i] for i in labels]
-print("\n✅ Rapport de classification :")
-print(classification_report(y_test, y_pred, labels=labels, target_names=target_names))
+# 7. Entraîner
+rf_pipeline.fit(X_train, y_train)
 
-# 9. Sauvegarde
-with open("model.pkl", "wb") as f:
-    pickle.dump({
-        "model": model,
-        "scaler": scaler,
-        "imputer": imputer,
-        "columns": X.columns.tolist(),
-        "label_map": dict(zip(range(len(le_target.classes_)), le_target.classes_))
-    }, f)
+# 8. Prédictions
+y_pred = rf_pipeline.predict(X_test)
 
-print("\n✅ Modèle XGBoost multi-classe sauvegardé dans model.pkl")
+# 9. Précision et rapport
+print("Accuracy Random Forest:", accuracy_score(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred, target_names=le.classes_))
+
+# 10. Matrice de confusion
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(10, 7))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Greens', xticklabels=le.classes_, yticklabels=le.classes_)
+plt.xlabel('Classe prédite')
+plt.ylabel('Classe réelle')
+plt.title('Matrice de confusion - Random Forest')
+plt.show()
+
+# 11. Comparer diagnostic réel, prédiction, classification sur le test
+classification_test = classification.loc[X_test.index]
+
+result_df = pd.DataFrame({
+    "diagnostic_reel": le.inverse_transform(y_test),
+    "diagnostic_pred": le.inverse_transform(y_pred),
+    "classification": classification_test
+})
+
+print(result_df.head(10))
