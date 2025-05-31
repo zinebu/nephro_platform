@@ -38,19 +38,13 @@ const questions = [
 ];
 
 export default function BodySelector({ onDone }) {
-
   const [step, setStep] = useState(-1);
   const [chat, setChat] = useState([]);
   const [writing, setWriting] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [symptoms, setSymptoms] = useState([]);
   const [backendResults, setBackendResults] = useState(null);
-  const [predictResult, setPredictResult] = useState(null);
   const navigate = useNavigate();
-
-  const goToApp = () => {
-    navigate("/app"); // ou "/" si tu veux aller à la page d'accueil
-  };
 
   useEffect(() => {
     if (step === -1) {
@@ -112,17 +106,32 @@ export default function BodySelector({ onDone }) {
   };
 
   return (
-    <div style={{ maxWidth: "600px", margin: "2rem auto", padding: "1rem", backgroundColor: "#f2f5f8", borderRadius: "1rem", fontFamily: "Arial" }}>
-      <h2 style={{ textAlign: "center" }}>👩‍⚕️ Assistant Santé Rénale</h2>
+    <div style={{
+      maxWidth: "700px",
+      margin: "2rem auto",
+      padding: "2rem",
+      backgroundColor: "#e8f5f9",
+      borderRadius: "1rem",
+      boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+      fontFamily: "Arial"
+    }}>
+      <h2 style={{ textAlign: "center", color: "#2BBBAD" }}>👩‍⚕️ Assistant Santé Rénale</h2>
 
-      <div style={{ backgroundColor: "white", borderRadius: "0.5rem", padding: "1rem", minHeight: "300px", marginBottom: "1rem", boxShadow: "0 0 10px rgba(0,0,0,0.05)" }}>
+      <div style={{
+        backgroundColor: "#fff",
+        borderRadius: "1rem",
+        padding: "1.5rem",
+        minHeight: "300px",
+        marginBottom: "1.5rem",
+        boxShadow: "0 0 12px rgba(0,0,0,0.06)"
+      }}>
         {chat.map((msg, idx) => (
-          <div key={idx} style={{ textAlign: msg.type === "bot" ? "left" : "right", marginBottom: "0.5rem" }}>
+          <div key={idx} style={{ textAlign: msg.type === "bot" ? "left" : "right", marginBottom: "0.75rem" }}>
             <div style={{
               display: "inline-block",
-              padding: "10px",
+              padding: "10px 15px",
               borderRadius: "1rem",
-              backgroundColor: msg.type === "bot" ? "#e0f0ff" : "#c7ffc7",
+              backgroundColor: msg.type === "bot" ? "#d1f4f0" : "#c7ffc7",
               maxWidth: "75%"
             }}>
               {msg.text}
@@ -133,42 +142,67 @@ export default function BodySelector({ onDone }) {
       </div>
 
       {!backendResults && !writing && step >= 0 && step < questions.length && (
-        <div style={{ textAlign: "center" }}>
-          {questions[step].options.map(option => (
-            <label key={option} style={{ display: "block", marginBottom: "0.5rem" }}>
-              <input
-                type="checkbox"
-                value={option}
-                checked={selectedOptions.includes(option)}
-                onChange={() => handleCheckboxChange(option)}
-                style={{ marginRight: "0.5rem" }}
-              />
-              {option}
-            </label>
-          ))}
-          <button 
-            onClick={handleNext}
-            style={{
-              marginTop: "1rem",
-              padding: "0.5rem 1rem",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer"
-            }}
-          >
-            Suivant
-          </button>
-        </div>
+        <>
+          <div style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: "0.75rem",
+            marginTop: "1rem"
+          }}>
+            {questions[step].options.map(option => {
+              const isSelected = selectedOptions.includes(option);
+              return (
+                <button
+                  key={option}
+                  onClick={() => handleCheckboxChange(option)}
+                  style={{
+                    padding: "0.6rem 1rem",
+                    borderRadius: "30px",
+                    border: isSelected ? "2px solid #2BBBAD" : "2px solid #ccc",
+                    backgroundColor: isSelected ? "#2BBBAD" : "#fff",
+                    color: isSelected ? "#fff" : "#333",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    transition: "all 0.3s ease"
+                  }}
+                >
+                  {option}
+                </button>
+              );
+            })}
+          </div>
+          <div style={{ textAlign: "center", marginTop: "1rem" }}>
+            <button
+              onClick={handleNext}
+              style={{
+                padding: "0.6rem 1.5rem",
+                backgroundColor: "#2BBBAD",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "16px",
+                cursor: "pointer"
+              }}
+            >
+              Suivant
+            </button>
+          </div>
+        </>
       )}
 
       {backendResults && (
         <div>
-          <h3>🔍 Résultats basés sur vos réponses :</h3>
+          <h3 style={{ color: "#333" }}>🔍 Résultats basés sur vos réponses :</h3>
           <p>{backendResults.message}</p>
           {backendResults.possible_diseases?.map((item, i) => (
-            <div key={i} style={{ marginBottom: "1rem" }}>
+            <div key={i} style={{
+              backgroundColor: "#ffffff",
+              padding: "1rem",
+              borderRadius: "0.5rem",
+              marginTop: "1rem",
+              boxShadow: "0 0 8px rgba(0,0,0,0.05)"
+            }}>
               <strong>🦠 Maladie suspectée :</strong> {item.disease}
               <ul>
                 <li>🧍 Symptômes détectés : {item.matching_symptoms.join(", ")}</li>
@@ -176,31 +210,23 @@ export default function BodySelector({ onDone }) {
               </ul>
             </div>
           ))}
-       <button
-  onClick={onDone}
-  style={{
-    marginTop: "1.5rem",
-    padding: "12px 25px",
-    backgroundColor: "#28a745",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer"
-  }}
->
-  ✅ J’ai fait ces analyses
-</button>
-        </div>
-      )}
-
-      {predictResult && (
-        <div style={{ marginTop: "1rem", backgroundColor: "#fff3cd", padding: "1rem", borderRadius: "0.5rem" }}>
-          <h4>📊 Résultat de la prédiction :</h4>
-          {predictResult.error ? (
-            <p style={{ color: "red" }}>{predictResult.error}</p>
-          ) : (
-            <pre>{JSON.stringify(predictResult, null, 2)}</pre>
-          )}
+          <div style={{ textAlign: "center" }}>
+            <button
+              onClick={onDone}
+              style={{
+                marginTop: "2rem",
+                padding: "0.8rem 2rem",
+                backgroundColor: "#2BBBAD",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                fontSize: "16px"
+              }}
+            >
+              ✅ J’ai fait ces analyses
+            </button>
+          </div>
         </div>
       )}
     </div>
