@@ -48,6 +48,8 @@ export default function BodySelector({ onDone }) {
   const [symptoms, setSymptoms] = useState([]);
   const [backendResults, setBackendResults] = useState(null);
   const navigate = useNavigate();
+  
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   useEffect(() => {
     if (step === -1) {
@@ -101,7 +103,7 @@ export default function BodySelector({ onDone }) {
     setChat(prev => [...prev, { type: "bot", text: "Merci. Je vais maintenant analyser vos réponses..." }]);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/analyse-symptomes/", {
+      const response = await fetch("http://127.0.0.1:8000/assistant/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ symptoms })
@@ -110,7 +112,7 @@ export default function BodySelector({ onDone }) {
       const data = await response.json();
       setBackendResults(data);
 
-      const prediction = await fetch("http://127.0.0.1:8000/api/predict/", {
+      const prediction = await fetch("http://127.0.0.1:8000/predict/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data.recommanded_tests.reduce((acc, curr) => {
@@ -119,8 +121,7 @@ export default function BodySelector({ onDone }) {
         }, {}))
       });
 
-      const predictionData = await prediction.json();
-      setPredictResult(predictionData.prediction);
+    
     } catch (error) {
       setChat(prev => [...prev, { type: "bot", text: "Erreur lors de l'analyse." }]);
     } finally {
