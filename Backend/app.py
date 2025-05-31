@@ -1,7 +1,7 @@
 # app.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from Routes.ai_routes import prediction_router
+from Routes.ai_routes import  router_predict_risk, router_prédire
 from Routes.assistant_routes import assistant_router
 
 app = FastAPI(title="Plateforme Médicale de Néphrologie")
@@ -16,5 +16,7 @@ app.add_middleware(
 )
 
 # Routes
-app.include_router(prediction_router)
+
 app.include_router(assistant_router)
+app.include_router(router_predict_risk)
+app.include_router(router_prédire)

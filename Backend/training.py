@@ -39,9 +39,13 @@ rf_pipeline.fit(X_train, y_train)
 # 8. Prédictions
 y_pred = rf_pipeline.predict(X_test)
 
-# 12. Sauvegarder le modèle entraîné
-joblib.dump(rf_pipeline, "model.pkl")
-print("Modèle et encoder sauvegardés avec succès.")
+# 8. Sauvegarder le pipeline + label encoder ensemble
+joblib.dump({
+    "model": rf_pipeline,
+    "label_encoder": le
+}, "model.pkl")
+
+print("Modèle et encodeur sauvegardés avec succès.")
 # 9. Précision et rapport
 print("Accuracy Random Forest:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n", classification_report(y_test, y_pred, target_names=le.classes_))
