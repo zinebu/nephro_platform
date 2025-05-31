@@ -3,6 +3,10 @@ import axios from "axios";
 import Welcome from "./components/welcome";
 import BodySelector from "./components/BodySelector";
 
+
+
+
+
 const analysesDisponibles = [
   { key: "age", label: "Âge", category: "Informations générales" },
   { key: "bp", label: "Pression artérielle (BP)", category: "Informations générales" },
