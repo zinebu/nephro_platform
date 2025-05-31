@@ -24,7 +24,17 @@ export default function Welcome({ onStart }) {
         <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>NephroPlatform</div>
         <div style={{ display: "flex", gap: "1.5rem" }}>
           <a href="#" style={{ color: "#fff", textDecoration: "none" }}>Accueil</a>
-          <Link to="/chatbot" style={{ color: "#fff", textDecoration: "none" }}>Assistant</Link>
+          <a
+  href="#"
+  onClick={(e) => {
+    e.preventDefault();
+    onStart();
+  }}
+  style={{ color: "#fff", textDecoration: "none" }}
+>
+  Assistant
+</a>
+
 
           <a href="/app" style={{ color: "#fff", textDecoration: "none" }}>Prédiction</a>
           <a href="#apropos" style={{ color: "#fff", textDecoration: "none" }}>À propos</a>
@@ -158,7 +168,7 @@ export default function Welcome({ onStart }) {
           fontSize: "16px",
           cursor: "pointer"
         }}>
-          Commencer
+          voir plus
         </button>
       </section>
 
@@ -199,7 +209,7 @@ export default function Welcome({ onStart }) {
             fontSize: "16px",
             cursor: "pointer"
           }}>
-            Commencer
+           voir plus
           </button>
         </div>
       </section>
