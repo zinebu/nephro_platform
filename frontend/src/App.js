@@ -14,6 +14,8 @@ function App() {
       <Route path="/assistant" element={<BodySelector />} />
       <Route path="/predict" element={<Formulaire />} />
       <Route path="/connexion" element={<AuthPage/>}/>
+      <Route path="/menu" element={<HomeMenu />} />
+
 
     </Routes>
   );

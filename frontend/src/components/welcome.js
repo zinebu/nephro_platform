@@ -89,7 +89,7 @@ export default function Welcome() {
             Grâce à notre intelligence artificielle, obtenez un diagnostic fiable basé sur vos analyses médicales et vos symptômes.
           </p>
           <button
-            onClick={() => navigate("/menu")}
+            onClick={() => navigate("/connexion")}
             style={{
               backgroundColor: "#fff",
               color: "#2BBBAD",

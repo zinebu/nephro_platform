@@ -283,19 +283,19 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
               ))}
               <div style={{ textAlign: "center", marginTop: "2rem" }}>
                 <button
-                  onClick={onDone}
-                  style={{
-                    padding: "0.8rem 2rem",
-                    backgroundColor: "#2BBBAD",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "6px",
-                    fontSize: "16px",
-                    cursor: "pointer"
-                  }}
-                >
-                  ✅ J’ai fait ces analyses
-                </button>
+  onClick={() => navigate("/predict")}
+  style={{
+    padding: "0.8rem 2rem",
+    backgroundColor: "#2BBBAD",
+    color: "#fff",
+    border: "none",
+    borderRadius: "6px",
+    fontSize: "16px",
+    cursor: "pointer"
+  }}
+>
+  ✅ J’ai fait ces analyses
+</button>
               </div>
             </div>
           )}
