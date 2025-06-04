@@ -1,13 +1,42 @@
 import React from "react";
-import backgroundImg from "../assets/image.png"; // image de fond
-import doctorPhoto from "../assets/au.jpg"; // image à propos
-import { Link } from "react-router-dom";
+import backgroundImg from "../assets/image.png";
+import doctorPhoto from "../assets/au.jpg";
+import { useNavigate } from "react-router-dom";
+import Lottie from "lottie-react";
+import DoctorLottie from "../assets/doctor-lottie.json";
+import AiLottie from "../assets/predict-lottie.json";
+import AnalyzeLottie from "../assets/analyze-lottie.json";
+import HistoryLottie from "../assets/history-lottie.json";
 
-export default function Welcome({ onStart }) {
+const services = [
+  {
+    title: "Chatbot médical",
+    lottie: DoctorLottie,
+    description: "Posez vos symptômes et laissez notre assistant vous guider vers les examens adaptés."
+  },
+  {
+    title: "Analyse par IA",
+    lottie: AiLottie,
+    description: "Prédiction fiable des maladies rénales à partir de vos résultats biologiques."
+  },
+  {
+    title: "Suggestions d'analyses",
+    lottie: AnalyzeLottie,
+    description: "Nous vous proposons les tests médicaux les plus pertinents en fonction de vos douleurs."
+  },
+  {
+    title: "Historique patient",
+    lottie: HistoryLottie,
+    description: "Conservez un suivi des prédictions et comparez les diagnostics dans le temps."
+  }
+];
+
+export default function Welcome() {
+  const navigate = useNavigate();
+
   return (
     <div style={{ fontFamily: "sans-serif", backgroundColor: "#e8f5f9" }}>
-      
-      {/* Navbar fixe */}
+      {/* Navbar */}
       <nav style={{
         backgroundColor: "transparent",
         color: "#fff",
@@ -19,26 +48,17 @@ export default function Welcome({ onStart }) {
         top: 0,
         left: 0,
         width: "100%",
-        zIndex: 1000
+        zIndex: 1000,
+        boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)"
       }}>
         <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>NephroPlatform</div>
         <div style={{ display: "flex", gap: "1.5rem" }}>
           <a href="#" style={{ color: "#fff", textDecoration: "none" }}>Accueil</a>
-          <a
-  href="#"
-  onClick={(e) => {
-    e.preventDefault();
-    onStart();
-  }}
-  style={{ color: "#fff", textDecoration: "none" }}
->
-  Assistant
-</a>
-
-
-          <a href="/app" style={{ color: "#fff", textDecoration: "none" }}>Prédiction</a>
+          <a href="#services" style={{ color: "#fff", textDecoration: "none" }}>Services</a>
           <a href="#apropos" style={{ color: "#fff", textDecoration: "none" }}>À propos</a>
-          <a href="#contact" style={{ color: "#fff", textDecoration: "none" }}>Contact</a>
+          <a href="/connexion" style={{ color: "#fff", textDecoration: "none" }}>Connexion</a>
         </div>
       </nav>
 
@@ -69,7 +89,7 @@ export default function Welcome({ onStart }) {
             Grâce à notre intelligence artificielle, obtenez un diagnostic fiable basé sur vos analyses médicales et vos symptômes.
           </p>
           <button
-            onClick={onStart}
+            onClick={() => navigate("/menu")}
             style={{
               backgroundColor: "#fff",
               color: "#2BBBAD",
@@ -86,15 +106,26 @@ export default function Welcome({ onStart }) {
       </section>
 
       {/* Fonctionnalités clés */}
-      <section style={{
+      <section id="services" style={{
         padding: "4rem 2rem",
         backgroundColor: "#fff",
         textAlign: "center"
       }}>
-        <h2 style={{ fontSize: "2.2rem", fontWeight: "bold", marginBottom: "1rem", color: "#000" }}>
-          Fonctionnalités principales
+        <h2 style={{
+          fontSize: "2.5rem",
+          fontWeight: "bold",
+          marginBottom: "1.2rem",
+          color: "#222",
+          letterSpacing: "-2px"
+        }}>
+          Nos services
         </h2>
-        <p style={{ maxWidth: "700px", margin: "0 auto 3rem", color: "#444" }}>
+        <p style={{
+          maxWidth: "700px",
+          margin: "0 auto 3rem",
+          color: "#444",
+          fontSize: "1.13rem"
+        }}>
           Notre outil vous guide depuis la description des symptômes jusqu'à l’analyse prédictive finale.
         </p>
 
@@ -102,56 +133,77 @@ export default function Welcome({ onStart }) {
           display: "flex",
           justifyContent: "center",
           flexWrap: "wrap",
-          gap: "2rem"
+          gap: "2rem",
+          marginBottom: "2.5rem"
         }}>
-          {[
-            {
-              title: "Chatbot médical",
-              icon: "💬",
-              description: "Posez vos symptômes et laissez notre assistant vous guider vers les examens adaptés."
-            },
-            {
-              title: "Analyse par IA",
-              icon: "🧠",
-              description: "Prédiction fiable des maladies rénales à partir de vos résultats biologiques."
-            },
-            {
-              title: "Suggestions d'analyses",
-              icon: "🧪",
-              description: "Nous vous proposons les tests médicaux les plus pertinents en fonction de vos douleurs."
-            },
-            {
-              title: "Historique patient",
-              icon: "📈",
-              description: "Conservez un suivi des prédictions et comparez les diagnostics dans le temps."
-            }
-          ].map((item, index) => (
-            <div key={index} style={{
-              width: "200px",
-              padding: "1.5rem",
-              backgroundColor: "#f9f9f9",
-              borderRadius: "10px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-              textAlign: "center"
-            }}>
+          {services.map((item, index) => (
+            <div
+              key={index}
+              style={{
+                width: "270px",
+                background: "#fafcff",
+                borderRadius: "1.5rem",
+                boxShadow: "0 2px 24px rgba(43,187,173,0.08), 0 1.5px 6px rgba(43,187,173,0.08)",
+                padding: "2rem 1.5rem 1.6rem 1.5rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                position: "relative",
+                transition: "all 0.24s cubic-bezier(.28,.45,.59,.93)",
+                cursor: "pointer",
+                border: "1.5px solid #e6f7f1"
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.boxShadow = "0 6px 32px 0 rgba(43,187,173,0.14)";
+                e.currentTarget.style.transform = "scale(1.045)";
+                e.currentTarget.style.borderColor = "#2BBBAD";
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.boxShadow = "0 2px 24px rgba(43,187,173,0.08), 0 1.5px 6px rgba(43,187,173,0.08)";
+                e.currentTarget.style.transform = "scale(1.0)";
+                e.currentTarget.style.borderColor = "#e6f7f1";
+              }}
+            >
+              {/* Accent bar */}
               <div style={{
-                fontSize: "2.5rem",
-                backgroundColor: "#2BBBAD",
-                borderRadius: "50%",
-                width: "80px",
-                height: "80px",
+                position: "absolute",
+                top: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "50px",
+                height: "5px",
+                background: "linear-gradient(90deg, #2BBBAD 40%, #43e97b 100%)",
+                borderRadius: "6px 6px 16px 16px"
+              }} />
+              {/* Lottie icon */}
+              <div style={{
+                margin: "1.2rem auto 1rem",
+                background: "#fff",
+                borderRadius: "1.5rem",
+                boxShadow: "0 1.5px 6px rgba(43,187,173,0.10)",
+                padding: "10px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#fff",
-                margin: "0 auto 1rem"
+                width: "88px",
+                height: "88px"
               }}>
-                {item.icon}
+                <Lottie animationData={item.lottie} loop={true} style={{ width: "100px", height: "100px" }} />
               </div>
-              <h3 style={{ fontSize: "1.1rem", fontWeight: "bold", marginBottom: "0.5rem" }}>
-                {item.title}
-              </h3>
-              <p style={{ fontSize: "0.9rem", color: "#555" }}>
+              {/* Title and description */}
+              <h3 style={{
+                fontSize: "1.22rem",
+                fontWeight: "bold",
+                color: "#22a089",
+                marginBottom: "0.7rem",
+                marginTop: "0"
+              }}>{item.title}</h3>
+              <p style={{
+                fontSize: "1rem",
+                color: "#465661",
+                lineHeight: "1.7",
+                margin: 0
+              }}>
                 {item.description}
               </p>
             </div>
@@ -159,14 +211,17 @@ export default function Welcome({ onStart }) {
         </div>
 
         <button style={{
-          marginTop: "3rem",
-          padding: "0.8rem 2rem",
-          backgroundColor: "#2BBBAD",
+          marginTop: "0.8rem",
+          padding: "0.95rem 2.7rem",
+          background: "linear-gradient(90deg, #2BBBAD 45%, #43e97b 100%)",
           color: "#fff",
           border: "none",
-          borderRadius: "6px",
-          fontSize: "16px",
-          cursor: "pointer"
+          borderRadius: "10px",
+          fontSize: "1.2rem",
+          cursor: "pointer",
+          fontWeight: "bold",
+          letterSpacing: "0.5px",
+          boxShadow: "0 3px 18px rgba(43,187,173,0.13)"
         }}>
           voir plus
         </button>
@@ -200,17 +255,21 @@ export default function Welcome({ onStart }) {
             NephroPlatform est développée par des ingénieurs et professionnels de santé, dans l’objectif d’aider les patients
             à mieux comprendre leurs résultats médicaux et à anticiper les maladies rénales grâce à l’IA.
           </p>
-          <button style={{
-            backgroundColor: "#2BBBAD",
-            color: "#fff",
-            padding: "0.8rem 2rem",
-            border: "none",
-            borderRadius: "6px",
-            fontSize: "16px",
-            cursor: "pointer"
-          }}>
-           voir plus
-          </button>
+        <button style={{
+          marginTop: "0.8rem",
+          padding: "0.95rem 2.7rem",
+          background: "linear-gradient(90deg, #2BBBAD 45%, #43e97b 100%)",
+          color: "#fff",
+          border: "none",
+          borderRadius: "10px",
+          fontSize: "1.2rem",
+          cursor: "pointer",
+          fontWeight: "bold",
+          letterSpacing: "0.5px",
+          boxShadow: "0 3px 18px rgba(43,187,173,0.13)"
+        }}>
+          voir plus
+        </button>
         </div>
       </section>
 
@@ -235,3 +294,4 @@ export default function Welcome({ onStart }) {
     </div>
   );
 }
+

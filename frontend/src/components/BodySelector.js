@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import Lottie from "lottie-react";
+import doctorAnimation from "../assets/doctor-lottie.json";
 import doctorAvatar from "../assets/doctor-avatar.png"; // image médecin
 import userAvatar from "../assets/user-avatar.png";     // image utilisateur
 import sideImage from "../assets/kidney-side.avif";      // image côté (ex: rein ou soin)
+import kidneyAnimation from "../assets/kidney-lottie.json";
+
+
+
 
 const questions = [
   {
@@ -134,27 +140,38 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   };
 
   return (
-    <div style={{ backgroundColor: "#e8f5f9", minHeight: "100vh" }}>
-      {/* Navbar */}
-      <nav style={{
-        backgroundColor: "#2BBBAD",
-        padding: "1rem 5%",
-        color: "#fff",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
-      }}>
-        <div style={{ fontWeight: "bold", fontSize: "1.3rem" }}>NephroPlatform</div>
-        <div style={{ display: "flex", gap: "1.5rem" }}>
-          <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
-          <Link to="/chatbot" style={{ color: "#fff", textDecoration: "none" }}>Assistant</Link>
-          <Link to="/app" style={{ color: "#fff", textDecoration: "none" }}>Prédiction</Link>
-        </div>
-      </nav>
+    <div style={{ 
+  minHeight: "100vh",
+  background: "linear-gradient(135deg, #2BBBAD 0%, #43e97b 100%)"
+}}>
+
+    <nav style={{
+  backgroundColor: "transparent",
+  color: "#fff",
+  padding: "1rem 2rem",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100%",
+  zIndex: 1000,
+  boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
+  backdropFilter: "blur(6px)",        // Effet glass
+  WebkitBackdropFilter: "blur(6px)",  // Safari
+}}>
+  <div style={{ fontWeight: "bold", fontSize: "1.3rem" }}>NephroPlatform</div>
+  <div style={{ display: "flex", gap: "1.5rem" }}>
+    <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
+    <Link to="/menu" style={{ color: "#fff", textDecoration: "none" }}>Menu</Link>
+  </div>
+</nav>
+
 
       {/* Contenu principal */}
       <div style={{
+        paddingTop: "80px",
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
@@ -169,7 +186,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
           borderRadius: "1rem",
           boxShadow: "0 8px 20px rgba(0,0,0,0.1)"
         }}>
-          <h2 style={{ textAlign: "center", color: "#2BBBAD" }}>💬 Assistant Santé Rénale</h2>
+          
 
           <div style={{ marginTop: "2rem", minHeight: "300px" }}>
             {chat.map((msg, idx) => (
@@ -180,7 +197,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
                 alignItems: "center"
               }}>
                 {msg.type === "bot" && (
-                  <img src={doctorAvatar} alt="bot" style={{ width: "40px", height: "40px", marginRight: "10px" }} />
+                  <Lottie animationData={doctorAnimation} loop={true}  style={{ width: "60px", height: "60px", marginRight: "10px" }} />
                 )}
                 <div style={{
                   backgroundColor: msg.type === "bot" ? "#e0f7f4" : "#d1ffd6",
@@ -293,7 +310,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
           boxShadow: "0 8px 16px rgba(0,0,0,0.05)",
           textAlign: "center"
         }}>
-          <img src={sideImage} alt="kidney health" style={{ width: "100%", borderRadius: "0.5rem", marginBottom: "1rem" }} />
+          <Lottie animationData={kidneyAnimation} loop={true} alt="kidney health" style={{ width: "100%", borderRadius: "0.5rem", marginBottom: "1rem" }} />
           <h4 style={{ color: "#2BBBAD" }}>🔎 Conseil du jour</h4>
           <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: "1.6" }}>
             Boire de l'eau régulièrement aide à prévenir les calculs rénaux et favorise la filtration naturelle.
