@@ -11,7 +11,7 @@ SYMPTOMS_ANALYSES = {
             "Douleurs dans le bas du dos", "Urines foncées ou rouges", "Perte d'appétit",
             "Nausées et vomissements"
         ],
-        "analyses": ["rbc", "pcc", "sg"]
+        "analyses": ["rbc", "pcc", "sg", ]
     },
     "Insuffisance rénale aiguë": {
         "symptoms": [
@@ -73,4 +73,6 @@ def assistant():
 # @app.post("/predict") ...
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)             
+
+    
