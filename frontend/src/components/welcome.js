@@ -1,7 +1,7 @@
 import React from "react";
 import backgroundImg from "../assets/image.png";
 import doctorPhoto from "../assets/au.jpg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Lottie from "lottie-react";
 import DoctorLottie from "../assets/doctor-lottie.json";
 import AiLottie from "../assets/predict-lottie.json";
@@ -55,10 +55,10 @@ export default function Welcome() {
       }}>
         <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>NephroPlatform</div>
         <div style={{ display: "flex", gap: "1.5rem" }}>
-          <a href="#" style={{ color: "#fff", textDecoration: "none" }}>Accueil</a>
+          <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
           <a href="#services" style={{ color: "#fff", textDecoration: "none" }}>Services</a>
           <a href="#apropos" style={{ color: "#fff", textDecoration: "none" }}>À propos</a>
-          <a href="/connexion" style={{ color: "#fff", textDecoration: "none" }}>Connexion</a>
+          <Link to="/connexion" style={{ color: "#fff", textDecoration: "none" }}>Connexion</Link>
         </div>
       </nav>
 
@@ -164,7 +164,6 @@ export default function Welcome() {
                 e.currentTarget.style.borderColor = "#e6f7f1";
               }}
             >
-              {/* Accent bar */}
               <div style={{
                 position: "absolute",
                 top: 0,
@@ -175,7 +174,6 @@ export default function Welcome() {
                 background: "linear-gradient(90deg, #2BBBAD 40%, #43e97b 100%)",
                 borderRadius: "6px 6px 16px 16px"
               }} />
-              {/* Lottie icon */}
               <div style={{
                 margin: "1.2rem auto 1rem",
                 background: "#fff",
@@ -190,7 +188,6 @@ export default function Welcome() {
               }}>
                 <Lottie animationData={item.lottie} loop={true} style={{ width: "100px", height: "100px" }} />
               </div>
-              {/* Title and description */}
               <h3 style={{
                 fontSize: "1.22rem",
                 fontWeight: "bold",
@@ -223,7 +220,7 @@ export default function Welcome() {
           letterSpacing: "0.5px",
           boxShadow: "0 3px 18px rgba(43,187,173,0.13)"
         }}>
-          voir plus
+          Voir plus
         </button>
       </section>
 
@@ -255,21 +252,21 @@ export default function Welcome() {
             NephroPlatform est développée par des ingénieurs et professionnels de santé, dans l’objectif d’aider les patients
             à mieux comprendre leurs résultats médicaux et à anticiper les maladies rénales grâce à l’IA.
           </p>
-        <button style={{
-          marginTop: "0.8rem",
-          padding: "0.95rem 2.7rem",
-          background: "linear-gradient(90deg, #2BBBAD 45%, #43e97b 100%)",
-          color: "#fff",
-          border: "none",
-          borderRadius: "10px",
-          fontSize: "1.2rem",
-          cursor: "pointer",
-          fontWeight: "bold",
-          letterSpacing: "0.5px",
-          boxShadow: "0 3px 18px rgba(43,187,173,0.13)"
-        }}>
-          voir plus
-        </button>
+          <button style={{
+            marginTop: "0.8rem",
+            padding: "0.95rem 2.7rem",
+            background: "linear-gradient(90deg, #2BBBAD 45%, #43e97b 100%)",
+            color: "#fff",
+            border: "none",
+            borderRadius: "10px",
+            fontSize: "1.2rem",
+            cursor: "pointer",
+            fontWeight: "bold",
+            letterSpacing: "0.5px",
+            boxShadow: "0 3px 18px rgba(43,187,173,0.13)"
+          }}>
+            Voir plus
+          </button>
         </div>
       </section>
 
@@ -294,4 +291,3 @@ export default function Welcome() {
     </div>
   );
 }
-

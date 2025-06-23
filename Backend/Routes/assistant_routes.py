@@ -10,29 +10,47 @@ class AssistantInput(BaseModel):
     symptoms: List[str]
 
 SYMPTOMS_ANALYSES = {
-    "Glomérulonéphrite": {
+      "Glomérulonéphrite": {
         "symptoms": [
             "Urine mousseuse", "Gonflement des chevilles", "Fatigue", "Hypertension artérielle",
-            "Douleurs dans le bas du dos", "Urines foncées ou rouges", "Perte d'appétit",
-            "Nausées et vomissements"
+            "Urines foncées ou rouges", "Perte d'appétit", "Nausées"
         ],
-        "analyses": ["rbc", "pcc", "sg"]
+        "analyses": ['age', 'al', 'rbc', 'sc', 'bu', 'pc', 'pcc', 'htn']
     },
     "Insuffisance rénale aiguë": {
         "symptoms": [
             "Réduction de la quantité d'urine", "Rétention de liquides", "Essoufflement",
-            "Confusion", "Nausées et vomissements", "Fatigue intense", "Pression artérielle élevée",
-            "Douleurs dans le bas du dos"
+            "Confusion", "Nausées", "Fatigue intense", "Hypertension soudaine", "Douleurs dans le bas du dos"
         ],
-        "analyses": ["sc", "bu", "pot", "bp"]
+        "analyses": ['age', 'sc', 'bu', 'pot', 'htn', 'pe']
     },
     "Maladie rénale chronique": {
         "symptoms": [
-            "Fatigue excessive", "Gonflement des pieds", "Urine mousseuse", "Hypertension artérielle",
-            "Perte d'appétit", "Nausées et vomissements", "Anémie", "Démangeaisons persistantes",
-            "Douleurs dans le bas du dos"
+            "Fatigue chronique", "Gonflement des pieds", "Urine mousseuse", "Hypertension artérielle",
+            "Perte d'appétit", "Anémie", "Nausées", "Crampes musculaires", "Démangeaisons"
         ],
-        "analyses": ["bu", "sc", "bgr", "sod", "hemo"]
+        "analyses": ['age', 'bu', 'al', 'sg', 'sc', 'hemo', 'pot', 'htn', 'bgr']
+    },
+    "Néphropathie diabétique": {
+        "symptoms": [
+            "Urine mousseuse", "Fatigue", "Gonflement des pieds", "Perte de poids",
+            "Hypertension", "Besoin fréquent d’uriner"
+        ],
+        "analyses": ['age', 'al', 'sc', 'bgr', 'htn']
+    },
+    "Néphropathie hypertensive": {
+        "symptoms": [
+            "Hypertension persistante", "Gonflement des jambes", "Urine mousseuse", "Fatigue",
+            "Vertiges", "Douleurs dans les reins"
+        ],
+        "analyses": ['age', 'al', 'bu', 'sc', 'htn', 'pot', 'sod']
+    },
+    "Syndrome néphrotique": {
+        "symptoms": [
+            "Gonflement important", "Urine très mousseuse", "Fatigue extrême",
+            "Prise de poids rapide", "Perte d’appétit", "Infections fréquentes"
+        ],
+        "analyses": ['age', 'al', 'sg', 'hemo', 'pcv', 'sc', 'pot', 'dm', 'pe']
     }
 }
 
