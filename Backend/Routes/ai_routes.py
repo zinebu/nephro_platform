@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Dict, Any
+from datetime import date
 import numpy as np
-from models.ai import predict_risk, InputData  # Assure-toi du bon chemin
-from models.ai import calculer_tgf
+from sqlalchemy.orm import Session
+from models.ai import predict_risk, InputData, calculer_tgf  # Assure-toi du bon chemin
+from models.patientdb import Patient, get_db
 
 router_predict_risk= APIRouter()
 router_prédire = APIRouter()
@@ -35,26 +37,33 @@ def predict_rf_strict(input_data: InputData):
      }
 
 @router_prédire.post("/predict")
-def predict_with_tgf(request: dict):
-    patient = request.get("patient", {})
-    analyses = request.get("analyses", {})
-    age = patient.get("age")
-    sexe = patient.get("sexe")
-    origine_africaine = patient.get("origine")  # <-- Gère les deux noms !
-    creatinine = analyses.get("sc")
+def predict_with_tgf(body: dict, db: Session = Depends(get_db)):
+    email = body.get("email")
+    analyses = body.get("analyses", {})
 
-    # Vérifier les champs obligatoires
-    if creatinine is None or age is None or not sexe or origine_africaine is None:
-        return {
-            "error": "Merci de fournir l'âge, le sexe, l'origine et la créatinine (sc) pour le calcul du TGF."
-        }
-    try:
-        tgf = calculer_tgf(float(creatinine), int(age), sexe, origine_africaine)
-    except Exception as e:
-        return {"error": str(e)}
+    patient = db.query(Patient).filter_by(email=email).first()
+    if not patient:
+        raise HTTPException(status_code=404, detail="Patient non trouvé")
 
-    # Le DIAGNOSTIC doit utiliser STRICTEMENT la même fonction ML !
-    diagnostics = predict_risk(analyses)
+    # Calcul de l'âge
+    naissance = patient.date_naissance
+    today = date.today()
+    age = today.year - naissance.year - ((today.month, today.day) < (naissance.month, naissance.day))
+
+    sexe = "H" if patient.sexe.lower().startswith("h") else "F"
+    africain = patient.africain  # booléen
+
+    # 👉 Tu ajoutes ici les valeurs venant de la base à tes analyses
+    input_data = dict(analyses)
+    input_data["age"] = age
+    input_data["sexe"] = sexe
+    input_data["africain"] = africain
+
+    print("INPUT DATA AVANT PRÉDICTION:", input_data)   # <-- Pour debug
+
+    # Calcul du TGF et prédiction
+    tgf = calculer_tgf(input_data["sc"], age, sexe, africain)
+    diagnostics = predict_risk(input_data)
 
     return {
         "tgf": tgf,
