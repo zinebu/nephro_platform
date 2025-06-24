@@ -2,38 +2,18 @@ import React, { useState } from "react";
 import axios from "axios";
 import { FaFlask, FaDiagnoses } from "react-icons/fa";
 
-const analysesList = [
-  "age", "bp", "sg", "al", "su", "bgr", "bu", "sc", "sod", "pot",
-  "hemo", "pcv", "wc", "rc", "htn", "dm", "cad", "appet", "pe", "ane",
-  "rbc", "pc", "pcc", "ba"
-];
-
 const groupedAnalyses = [
-  {
-    title: "Paramètres de base",
-    analyses: ["age", "bp", "sg", "al", "su"]
-  },
-  {
-    title: "Biochimie",
-    analyses: ["bgr", "bu", "sc", "sod", "pot"]
-  },
-  {
-    title: "Sang",
-    analyses: ["hemo", "pcv", "wc", "rc"]
-  },
-  {
-    title: "Conditions cliniques",
-    analyses: ["htn", "dm", "cad", "appet", "pe", "ane"]
-  },
-  {
-    title: "Urinaire",
-    analyses: ["rbc", "pc", "pcc", "ba"]
-  }
+  { title: "Paramètres de base", analyses: ["age", "bp", "sg", "al", "su"] },
+  { title: "Biochimie", analyses: ["bgr", "bu", "sc", "sod", "pot"] },
+  { title: "Sang", analyses: ["hemo", "pcv", "wc", "rc"] },
+  { title: "Conditions cliniques", analyses: ["htn", "dm", "cad", "appet", "pe", "ane"] },
+  { title: "Urinaire", analyses: ["rbc", "pc", "pcc", "ba"] }
 ];
 
 const FormulaireAnalyses = () => {
   const [formData, setFormData] = useState({});
   const [resultats, setResultats] = useState(null);
+  const [tgf, setTgf] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -44,12 +24,18 @@ const FormulaireAnalyses = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Formulaire soumis");
+    console.log("FormData :", formData);
+
     try {
       const response = await axios.post("http://127.0.0.1:8000/predict", {
         data: formData,
       });
+      console.log("Réponse du serveur :", response.data);
+      setTgf(response.data.tgf || null);
       setResultats(response.data.diagnostics);
     } catch (error) {
+      console.error("Erreur lors de la requête :", error);
       setResultats([
         {
           diagnostic: "Erreur",
@@ -69,6 +55,7 @@ const FormulaireAnalyses = () => {
         <p style={{ color: "#465661", fontSize: "1.125rem", marginBottom: "2rem" }}>
           Saisissez les résultats de vos analyses pour obtenir un diagnostic prédictif basé sur l’intelligence artificielle.
         </p>
+
         <form onSubmit={handleSubmit}>
           {groupedAnalyses.map((group, i) => (
             <div key={i} style={{ marginBottom: "2rem", padding: "1.5rem", backgroundColor: "#f9fcfc", borderRadius: "1rem", boxShadow: "0 2px 6px rgba(0,0,0,0.05)" }}>
@@ -81,7 +68,14 @@ const FormulaireAnalyses = () => {
                       type="text"
                       name={analyse}
                       onChange={handleChange}
-                      style={{ border: "1px solid #ccd", borderRadius: "1rem", padding: "0.6rem 1rem", outline: "none", transition: "0.3s", fontSize: "1rem" }}
+                      style={{
+                        border: "1px solid #ccd",
+                        borderRadius: "1rem",
+                        padding: "0.6rem 1rem",
+                        outline: "none",
+                        transition: "0.3s",
+                        fontSize: "1rem"
+                      }}
                       placeholder={`Entrer la valeur de ${analyse}`}
                     />
                   </div>
@@ -110,7 +104,13 @@ const FormulaireAnalyses = () => {
           </div>
         </form>
 
-        {resultats && (
+        {tgf && (
+          <div style={{ marginTop: "2rem", padding: "1rem", background: "#f0faf8", borderRadius: "1rem", textAlign: "center", color: "#333", fontWeight: "bold" }}>
+            Taux de Filtration Glomérulaire (TGF) estimé : {tgf}
+          </div>
+        )}
+
+        {resultats && Array.isArray(resultats) && (
           <div style={{ marginTop: "2rem", background: "#f0faf8", borderLeft: "4px solid #2BBBAD", borderRadius: "1rem", padding: "1.5rem" }}>
             {resultats.map((res, index) => (
               <div key={index} style={{ marginBottom: "1.5rem" }}>

@@ -201,3 +201,20 @@ def creatinine_umolL_to_mgdl(creat_umolL):
     Convertit la créatinine de µmol/L en mg/dL
     """
     return float(creat_umolL) / 88.4
+@app.route("/predict", methods=["POST"])
+def predict():
+    data = request.get_json()
+    print("==== Données reçues depuis le frontend ====")
+    print(data)
+
+    # retour temporaire pour tester seulement la réception
+    return jsonify({
+        "diagnostics": [
+            {
+                "diagnostic": "Test OK",
+                "message": f"{len(data.get('analyses', {}))} analyses reçues",
+                "recommandation": "Connexion avec le frontend réussie"
+            }
+        ]
+    })
+
