@@ -146,7 +146,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 }}>
 
     <nav style={{
-  backgroundColor: "transparent",
+  backgroundImage: "linear-gradient(90deg, #2BBBAD 45%, #43e97b 100%)",
   color: "#fff",
   padding: "1rem 2rem",
   display: "flex",
@@ -155,18 +155,25 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   position: "fixed",
   top: 0,
   left: 0,
-  width: "100%",
+  right: 0,
   zIndex: 1000,
   boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
-  backdropFilter: "blur(6px)",        // Effet glass
-  WebkitBackdropFilter: "blur(6px)",  // Safari
+  backdropFilter: "blur(6px)",
+  WebkitBackdropFilter: "blur(6px)",
+  borderTopLeftRadius: "2rem",
+  borderTopRightRadius: "2rem",
+  margin: "0 auto",
+  width: "calc(100% - 4rem)"
 }}>
   <div style={{ fontWeight: "bold", fontSize: "1.3rem" }}>NephroPlatform</div>
   <div style={{ display: "flex", gap: "1.5rem" }}>
     <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
-    <Link to="/menu" style={{ color: "#fff", textDecoration: "none" }}>Menu</Link>
+              <Link to="/predict" style={{ color: "#fff", textDecoration: "none"  }}>Prédiction</Link>
+              <span style={{ color: "#fff", textDecoration: "none", cursor: "default" }}>Assistant</span>
+              <Link to="/login" style={{ color: "#fff", textDecoration: "none" }}>Se déconnecter</Link>
   </div>
 </nav>
+
 
 
       {/* Contenu principal */}
