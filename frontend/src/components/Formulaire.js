@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { FaFlask, FaDiagnoses } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const groupedAnalyses = [
   { title: "Paramètres de base", analyses: ["age", "bp", "sg", "al", "su"] },
@@ -24,16 +25,13 @@ const FormulaireAnalyses = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Formulaire soumis");
-    console.log("FormData :", formData);
 
     try {
       const response = await axios.post("http://127.0.0.1:8000/predict", {
         data: formData,
       });
-      console.log("Réponse du serveur :", response.data);
       setTgf(response.data.tgf || null);
-      setResultats(response.data.diagnostics);
+      setResultats(response.data.diagnostics || []);
     } catch (error) {
       console.error("Erreur lors de la requête :", error);
       setResultats([
@@ -47,10 +45,48 @@ const FormulaireAnalyses = () => {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(to bottom right, #e8f5f9, #f7fcff)", padding: "3rem 1rem" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", background: "#fff", borderRadius: "2rem", padding: "3rem", boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)" }}>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(to bottom right, #e8f5f9, #f7fcff)", paddingTop: "6rem", padding: "3rem 1rem" }}>
+      
+      {/* Navbar */}
+      <nav style={{
+        backgroundImage: "linear-gradient(90deg, #2BBBAD 45%, #43e97b 100%)",
+        color: "#fff",
+        padding: "1rem 2rem",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+        borderTopLeftRadius: "2rem",
+        borderTopRightRadius: "2rem",
+        margin: "0 auto",
+        width: "calc(100% - 4rem)"
+      }}>
+        <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>NephroPlatform</div>
+        <div style={{ display: "flex", gap: "1.5rem" }}>
+          <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
+          <span style={{ color: "#fff", fontWeight: "bold", cursor: "default" }}>Prédiction</span>
+          <Link to="/assistant" style={{ color: "#fff", textDecoration: "none" }}>Assistant</Link>
+          <Link to="/login" style={{ color: "#fff", textDecoration: "none" }}>Se déconnecter</Link>
+        </div>
+      </nav>
+
+      <div style={{
+        maxWidth: "1200px",
+        margin: "0 auto",
+        background: "#fff",
+        borderRadius: "2rem",
+        padding: "3rem",
+        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)"
+      }}>
         <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", color: "#2BBBAD", marginBottom: "1.5rem" }}>
-          🧪 Analyse Médicale Personnalisée
+          Analyse Médicale Personnalisée
         </h1>
         <p style={{ color: "#465661", fontSize: "1.125rem", marginBottom: "2rem" }}>
           Saisissez les résultats de vos analyses pour obtenir un diagnostic prédictif basé sur l’intelligence artificielle.
@@ -58,7 +94,13 @@ const FormulaireAnalyses = () => {
 
         <form onSubmit={handleSubmit}>
           {groupedAnalyses.map((group, i) => (
-            <div key={i} style={{ marginBottom: "2rem", padding: "1.5rem", backgroundColor: "#f9fcfc", borderRadius: "1rem", boxShadow: "0 2px 6px rgba(0,0,0,0.05)" }}>
+            <div key={i} style={{
+              marginBottom: "2rem",
+              padding: "1.5rem",
+              backgroundColor: "#f9fcfc",
+              borderRadius: "1rem",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
+            }}>
               <h2 style={{ color: "#22a089", fontWeight: "bold", marginBottom: "1rem" }}>{group.title}</h2>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                 {group.analyses.map((analyse) => (
@@ -96,7 +138,7 @@ const FormulaireAnalyses = () => {
                 borderRadius: "1rem",
                 border: "none",
                 cursor: "pointer",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)"
               }}
             >
               <FaFlask style={{ marginRight: "0.5rem" }} /> Lancer la prédiction
@@ -118,10 +160,10 @@ const FormulaireAnalyses = () => {
                   <FaDiagnoses style={{ marginRight: "0.5rem" }} /> Diagnostic : {res.diagnostic || "Non disponible"}
                 </h2>
                 <p style={{ marginTop: "0.5rem", color: "#333" }}>
-                  📖 <strong>Message :</strong> {res.message || "-"}
+                  <strong>Message :</strong> {res.message || "-"}
                 </p>
                 <p style={{ marginTop: "0.3rem", color: "#555" }}>
-                  💡 <strong>Recommandation :</strong> {res.recommandation || "-"}
+                  <strong>Recommandation :</strong> {res.recommandation || "-"}
                 </p>
               </div>
             ))}

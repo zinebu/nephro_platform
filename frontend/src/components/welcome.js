@@ -38,21 +38,25 @@ export default function Welcome() {
     <div style={{ fontFamily: "sans-serif", backgroundColor: "#e8f5f9" }}>
       {/* Navbar */}
       <nav style={{
-        backgroundColor: "transparent",
-        color: "#fff",
-        padding: "1rem 2rem",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        zIndex: 1000,
-        boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
-        backdropFilter: "blur(6px)",
-        WebkitBackdropFilter: "blur(6px)"
-      }}>
+  backgroundImage: "linear-gradient(90deg, #2BBBAD 45%, #43e97b 100%)",
+  color: "#fff",
+  padding: "1rem 2rem",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  zIndex: 1000,
+  boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
+  backdropFilter: "blur(6px)",
+  WebkitBackdropFilter: "blur(6px)",
+  borderTopLeftRadius: "2rem",
+  borderTopRightRadius: "2rem",
+  margin: "0 auto",
+  width: "calc(100% - 4rem)"
+}}>
         <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>NephroPlatform</div>
         <div style={{ display: "flex", gap: "1.5rem" }}>
           <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
