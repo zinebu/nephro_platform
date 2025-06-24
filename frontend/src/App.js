@@ -4,7 +4,9 @@ import Welcome from "./components/welcome";
 import Formulaire from "./components/Formulaire";
 import BodySelector from "./components/BodySelector";
 import HomeMenu from "./components/HomeMenu"; // 👈 importe ton composant
-import AuthPage from "./components/AuthPage"; 
+import Inscription from "./components/Inscription";
+import Login from "./components/Login";
+
 
 function App() {
   return (
@@ -13,8 +15,9 @@ function App() {
       <Route path="/menu" element={<HomeMenu />} />   {/* 👈 route ajoutée */}
       <Route path="/assistant" element={<BodySelector />} />
       <Route path="/predict" element={<Formulaire />} />
-      <Route path="/connexion" element={<AuthPage/>}/>
+      <Route path="/inscription" element={<Inscription/>}/>
       <Route path="/menu" element={<HomeMenu />} />
+      <Route path="/login" element={<Login/>}/>
 
 
     </Routes>

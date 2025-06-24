@@ -8,6 +8,14 @@ import historyLottie from "../assets/history-lottie.json";
 const HomeMenu = () => {
   const navigate = useNavigate();
 
+  // Récupérer nom et prénom depuis localStorage
+  const nom = localStorage.getItem("nom") || "";
+  const prenom = localStorage.getItem("prenom") || "";
+
+  // Optionnel : choisir "Mr" ou "Mme" selon le sexe si tu le stockes aussi
+  const sexe = localStorage.getItem("sexe"); // à stocker lors du login ou inscription
+ const civilite = sexe === "femme" ? "Mme" : "Mr";
+
   return (
     <div
       style={{
@@ -31,9 +39,18 @@ const HomeMenu = () => {
           minWidth: 340
         }}
       >
+        {/* Message de bienvenue */}
+        <h2 style={{ color: "#17b978", fontWeight: "bold", marginBottom: 18, fontSize: 26, letterSpacing: "0.5px" }}>
+          {nom && prenom 
+            ? <>Bienvenue <span style={{ color: "#2BBBAD" }}> {nom} {prenom} </span> !</>
+            : <>Bienvenue sur la plateforme !</>
+          }
+        </h2>
+
         <h1 style={{ color: "#2BBBAD", fontWeight: "bold", marginBottom: 32, fontSize: 28 }}>
-          Que voulez-vous faire?
+          Que voulez-vous faire ?
         </h1>
+
         {/* Menu avec Lottie à gauche de chaque bouton */}
         <div style={{ display: "flex", flexDirection: "column", gap: 24, width: "100%" }}>
           {/* Assistant */}

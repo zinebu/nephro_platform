@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function InscriptionPatient() {
   const [form, setForm] = useState({
@@ -13,6 +14,7 @@ export default function InscriptionPatient() {
   });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -199,7 +201,29 @@ export default function InscriptionPatient() {
           }}>
           S'inscrire
         </button>
-        {message && <p style={{ color: "#18a184", fontWeight: "bold", marginTop: "0.2rem" }}>{message}</p>}
+
+        {/* Message de succès avec bouton "Se connecter" */}
+        {message && (
+          <div style={{ textAlign: "center", marginTop: "0.2rem" }}>
+            <p style={{ color: "#18a184", fontWeight: "bold" }}>{message}</p>
+            <button
+              style={{
+                marginTop: "0.7rem",
+                padding: "0.7rem 2rem",
+                background: "linear-gradient(90deg, #2BBBAD 60%, #43e97b 100%)",
+                color: "#fff",
+                border: "none",
+                borderRadius: "7px",
+                fontSize: "1rem",
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+              onClick={() => navigate("/login")}
+            >
+              Se connecter
+            </button>
+          </div>
+        )}
         {error && <p style={{ color: "#ff3333", fontWeight: "bold", marginTop: "0.2rem" }}>{error}</p>}
       </form>
     </div>

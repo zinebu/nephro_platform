@@ -58,7 +58,7 @@ export default function Welcome() {
           <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
           <a href="#services" style={{ color: "#fff", textDecoration: "none" }}>Services</a>
           <a href="#apropos" style={{ color: "#fff", textDecoration: "none" }}>À propos</a>
-          <Link to="/connexion" style={{ color: "#fff", textDecoration: "none" }}>Connexion</Link>
+          <Link to="/login" style={{ color: "#fff", textDecoration: "none" }}>Connexion</Link>
         </div>
       </nav>
 
@@ -89,7 +89,7 @@ export default function Welcome() {
             Grâce à notre intelligence artificielle, obtenez un diagnostic fiable basé sur vos analyses médicales et vos symptômes.
           </p>
           <button
-            onClick={() => navigate("/connexion")}
+            onClick={() => navigate("/login")}
             style={{
               backgroundColor: "#fff",
               color: "#2BBBAD",

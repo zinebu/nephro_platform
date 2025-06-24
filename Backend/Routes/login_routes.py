@@ -10,8 +10,13 @@ class LoginRequest(BaseModel):
 
 @login_router.post("/login")
 def login_user(data: LoginRequest):
-    success, message = login_patient(data.email, data.password)
+    success, message, nom, prenom = login_patient(data.email, data.password)
     if success:
-        return {"success": True, "message": message}
+          return {
+              "success": True,
+              "message": message,
+              "nom": nom,
+              "prenom": prenom
+    }
     else:
-        raise HTTPException(status_code=400, detail=message)
+      raise HTTPException(status_code=401, detail=message)
