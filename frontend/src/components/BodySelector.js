@@ -153,7 +153,7 @@ export default function BodySelector({ onDone }) {
         margin: "0 auto",
         width: "calc(100% - 4rem)"
       }}>
-        <div style={{ fontWeight: "bold", fontSize: "1.3rem" }}>NephroPlatform</div>
+        <div style={{ fontWeight: "bold", fontSize: "1.3rem" }}>Renalys</div>
         <div style={{ display: "flex", gap: "1.5rem" }}>
           <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
           <Link to="/predict" style={{ color: "#fff", textDecoration: "none" }}>Prédiction</Link>

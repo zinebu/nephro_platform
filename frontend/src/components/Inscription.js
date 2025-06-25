@@ -69,7 +69,7 @@ export default function InscriptionPatient() {
           color: "#2BBBAD",
           marginBottom: "0.5rem"
         }}>
-          Inscription patient
+          Inscription 
         </h2>
         <input
           type="text"

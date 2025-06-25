@@ -57,7 +57,7 @@ export default function Welcome() {
   margin: "0 auto",
   width: "calc(100% - 4rem)"
 }}>
-        <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>NephroPlatform</div>
+        <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>Renalys</div>
         <div style={{ display: "flex", gap: "1.5rem" }}>
           <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
           <a href="#services" style={{ color: "#fff", textDecoration: "none" }}>Services</a>
@@ -284,12 +284,12 @@ export default function Welcome() {
         borderTopLeftRadius: "1.5rem",
         borderTopRightRadius: "1.5rem"
       }}>
-        <h3 style={{ marginBottom: "1rem" }}>NephroPlatform © 2025</h3>
+        <h3 style={{ marginBottom: "1rem" }}>Renalys © 2025</h3>
         <p style={{ marginBottom: "0.5rem" }}>
           Plateforme intelligente d'aide au diagnostic des maladies rénales.
         </p>
         <p style={{ fontSize: "0.9rem", opacity: 0.85 }}>
-          Contact : contact@nephroplatform.ai | Tous droits réservés.
+          Contact : contact@Renalys.ai | Tous droits réservés.
         </p>
       </footer>
     </div>

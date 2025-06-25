@@ -94,7 +94,7 @@ export default function PatientHistory() {
         margin: "0 auto",
         width: "calc(100% - 4rem)"
       }}>
-        <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>NephroPlatform</div>
+        <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>Renalys</div>
         <div style={{ display: "flex", gap: "1.5rem" }}>
           <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
           <Link to="/predict" style={{ color: "#fff", textDecoration: "none" }}>Prédiction</Link>

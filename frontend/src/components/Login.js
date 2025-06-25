@@ -57,7 +57,7 @@ export default function ConnexionPatient() {
           color: "#2BBBAD",
           marginBottom: "0.5rem"
         }}>
-          Connexion patient
+          Connexion 
         </h2>
         <input
           type="email"
