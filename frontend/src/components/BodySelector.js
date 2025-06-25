@@ -158,6 +158,7 @@ export default function BodySelector({ onDone }) {
           <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
           <Link to="/predict" style={{ color: "#fff", textDecoration: "none" }}>Prédiction</Link>
           <span style={{ color: "#fff", textDecoration: "none", cursor: "default" }}>Assistant</span>
+          <Link to="/historique" style={{ color: "#fff", textDecoration: "none" }}>Historique</Link>
           <Link to="/login" style={{ color: "#fff", textDecoration: "none" }}>Se déconnecter</Link>
         </div>
       </nav>

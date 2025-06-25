@@ -6,6 +6,7 @@ import numpy as np
 from sqlalchemy.orm import Session
 from models.ai import predict_risk, InputData, calculer_tgf  # Assure-toi du bon chemin
 from models.patientdb import Patient, get_db
+from models.patientdb import Historique
 
 router_predict_risk= APIRouter()
 router_prédire = APIRouter()
@@ -51,19 +52,31 @@ def predict_with_tgf(body: dict, db: Session = Depends(get_db)):
     age = today.year - naissance.year - ((today.month, today.day) < (naissance.month, naissance.day))
 
     sexe = "H" if patient.sexe.lower().startswith("h") else "F"
-    africain = patient.africain  # booléen
+    africain = patient.africain
 
-    # 👉 Tu ajoutes ici les valeurs venant de la base à tes analyses
     input_data = dict(analyses)
     input_data["age"] = age
     input_data["sexe"] = sexe
     input_data["africain"] = africain
 
-    print("INPUT DATA AVANT PRÉDICTION:", input_data)   # <-- Pour debug
-
-    # Calcul du TGF et prédiction
     tgf = calculer_tgf(input_data["sc"], age, sexe, africain)
     diagnostics = predict_risk(input_data)
+
+    # Récupérer le diagnostic principal
+    diagnostic = diagnostics[0]["diagnostic"]
+    message = diagnostics[0]["message"]
+    recommandation = diagnostics[0]["recommandation"]
+
+    # 👉 Ajouter dans la table historique
+    historique = Historique(
+        patient_id=patient.id,
+        tgf=tgf,
+        diagnostic=diagnostic,
+        message=message,
+        recommandation=recommandation
+    )
+    db.add(historique)
+    db.commit()
 
     return {
         "tgf": tgf,

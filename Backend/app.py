@@ -7,10 +7,16 @@ from Routes.ai_routes import  router_predict_risk, router_prédire
 from Routes.assistant_routes import assistant_router
 from Routes.Auth_routes import register_router
 from Routes.login_routes import login_router
+from Routes.history_routes import router as history_router
+
+
+
 
 
 
 app = FastAPI(title="Plateforme Médicale de Néphrologie")
+
+app.include_router(history_router)
 
 # CORS
 app.add_middleware(

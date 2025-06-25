@@ -117,7 +117,8 @@ const FormulaireAnalyses = () => {
           <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
           <span style={{ color: "#fff", fontWeight: "bold", cursor: "default" }}>Prédiction</span>
           <Link to="/assistant" style={{ color: "#fff", textDecoration: "none" }}>Assistant</Link>
-          <Link to="/login" style={{ color: "#fff", textDecoration: "none" }}>Se déconnecter</Link>
+          <Link to="/historique" style={{ color: "#fff", textDecoration: "none" }}>Historique</Link>
+          <Link to="/login" style={{ color: "#fff", textDecoration: "none" }}>Déconnexion</Link>
         </div>
       </nav>
 

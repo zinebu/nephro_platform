@@ -6,6 +6,7 @@ import BodySelector from "./components/BodySelector";
 import HomeMenu from "./components/HomeMenu"; // 👈 importe ton composant
 import Inscription from "./components/Inscription";
 import Login from "./components/Login";
+import Historique from "./components/historique";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Route path="/inscription" element={<Inscription/>}/>
       <Route path="/menu" element={<HomeMenu />} />
       <Route path="/login" element={<Login/>}/>
+      <Route path="/historique" element={<Historique />} />
 
 
     </Routes>
