@@ -8,7 +8,7 @@ router_patient = APIRouter()
 conn = psycopg2.connect(
     dbname="patientdb",
     user="postgres",
-    password="zineb",
+    password="Sql22092002",
     host="localhost",
     port="5432"
 )

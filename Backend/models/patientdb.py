@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Date, Boolean, Fo
 from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
 
-DATABASE_URL = "postgresql://postgres:zineb@localhost:5432/patientdb"
+DATABASE_URL = "postgresql://postgres:Sql22092002@localhost:5432/patientdb"
 
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
