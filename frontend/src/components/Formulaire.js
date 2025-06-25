@@ -3,8 +3,49 @@ import axios from "axios";
 import { FaFlask, FaDiagnoses } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+// Analyses catégorielles et leurs options possibles
+const ANALYSE_OPTIONS = {
+  rbc: ["normal", "abnormal"],
+  pc: ["normal", "abnormal"],
+  pcc: ["present", "notpresent"],
+  ba: ["present", "notpresent"],
+  htn: ["yes", "no"],
+  dm: ["yes", "no"],
+  cad: ["yes", "no"],
+  appet: ["good", "poor"],
+  pe: ["yes", "no"],
+  ane: ["yes", "no"],
+};
+
+// Labels lisibles
+const ANALYSE_LABELS = {
+  bp: "Pression artérielle (bp)",
+  sg: "Densité urinaire (sg)",
+  al: "Protéinurie (al)",
+  su: "Sucre urinaire (su)",
+  bgr: "Glycémie (bgr)",
+  bu: "Urée sanguine (bu)",
+  sc: "Créatinine sérique (sc)",
+  sod: "Sodium (sod)",
+  pot: "Potassium (pot)",
+  hemo: "Hémoglobine (hemo)",
+  pcv: "Volume globulaire (pcv)",
+  wc: "Leucocytes (wc)",
+  rc: "Érythrocytes (rc)",
+  htn: "Hypertension (htn)",
+  dm: "Diabète (dm)",
+  cad: "Cardiopathie (cad)",
+  appet: "Appétit (appet)",
+  pe: "Œdème (pe)",
+  ane: "Anémie (ane)",
+  rbc: "Globules rouges urinaires (rbc)",
+  pc: "Cylindres urinaires (pc)",
+  pcc: "Cellules épithéliales (pcc)",
+  ba: "Bactéries urinaires (ba)"
+};
+
 const groupedAnalyses = [
-  { title: "Paramètres de base", analyses: ["age", "bp", "sg", "al", "su"] },
+  { title: "Paramètres de base", analyses: ["bp", "sg", "al", "su"] },
   { title: "Biochimie", analyses: ["bgr", "bu", "sc", "sod", "pot"] },
   { title: "Sang", analyses: ["hemo", "pcv", "wc", "rc"] },
   { title: "Conditions cliniques", analyses: ["htn", "dm", "cad", "appet", "pe", "ane"] },
@@ -15,6 +56,10 @@ const FormulaireAnalyses = () => {
   const [formData, setFormData] = useState({});
   const [resultats, setResultats] = useState(null);
   const [tgf, setTgf] = useState(null);
+  const [error, setError] = useState("");
+
+  // Récupère l'email du patient (déjà connecté) depuis localStorage
+  const email = localStorage.getItem("email");
 
   const handleChange = (e) => {
     setFormData({
@@ -25,28 +70,27 @@ const FormulaireAnalyses = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError("");
+    if (!email) {
+      setError("Veuillez d'abord vous connecter.");
+      return;
+    }
     try {
       const response = await axios.post("http://127.0.0.1:8000/predict", {
-        data: formData,
+        email,
+        analyses: formData, // C'est la clé attendue par le backend
       });
       setTgf(response.data.tgf || null);
       setResultats(response.data.diagnostics || []);
     } catch (error) {
-      console.error("Erreur lors de la requête :", error);
-      setResultats([
-        {
-          diagnostic: "Erreur",
-          message: "Échec de la prédiction",
-          recommandation: "Vérifiez les données saisies.",
-        },
-      ]);
+      setResultats(null);
+      setTgf(null);
+      setError("Échec de la prédiction, vérifiez les données.");
     }
   };
 
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(to bottom right, #e8f5f9, #f7fcff)", paddingTop: "6rem", padding: "3rem 1rem" }}>
-      
       {/* Navbar */}
       <nav style={{
         backgroundImage: "linear-gradient(90deg, #2BBBAD 45%, #43e97b 100%)",
@@ -105,21 +149,45 @@ const FormulaireAnalyses = () => {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                 {group.analyses.map((analyse) => (
                   <div key={analyse} style={{ display: "flex", flexDirection: "column" }}>
-                    <label style={{ fontWeight: 600, color: "#465661", marginBottom: "0.5rem" }}>{analyse.toUpperCase()}</label>
-                    <input
-                      type="text"
-                      name={analyse}
-                      onChange={handleChange}
-                      style={{
-                        border: "1px solid #ccd",
-                        borderRadius: "1rem",
-                        padding: "0.6rem 1rem",
-                        outline: "none",
-                        transition: "0.3s",
-                        fontSize: "1rem"
-                      }}
-                      placeholder={`Entrer la valeur de ${analyse}`}
-                    />
+                    <label style={{ fontWeight: 600, color: "#465661", marginBottom: "0.5rem" }}>
+                      {ANALYSE_LABELS[analyse] || analyse}
+                    </label>
+                    {ANALYSE_OPTIONS[analyse] ? (
+                      <select
+                        name={analyse}
+                        value={formData[analyse] || ""}
+                        onChange={handleChange}
+                        style={{
+                          border: "1px solid #ccd",
+                          borderRadius: "1rem",
+                          padding: "0.6rem 1rem",
+                          fontSize: "1rem"
+                        }}
+                      >
+                        <option value="">--Sélectionnez--</option>
+                        {ANALYSE_OPTIONS[analyse].map(opt => (
+                          <option key={opt} value={opt}>
+                            {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        name={analyse}
+                        value={formData[analyse] || ""}
+                        onChange={handleChange}
+                        style={{
+                          border: "1px solid #ccd",
+                          borderRadius: "1rem",
+                          padding: "0.6rem 1rem",
+                          outline: "none",
+                          transition: "0.3s",
+                          fontSize: "1rem"
+                        }}
+                        placeholder={`Entrer la valeur de ${ANALYSE_LABELS[analyse] || analyse}`}
+                      />
+                    )}
                   </div>
                 ))}
               </div>
@@ -167,6 +235,12 @@ const FormulaireAnalyses = () => {
                 </p>
               </div>
             ))}
+          </div>
+        )}
+
+        {error && (
+          <div style={{ marginTop: "1.5rem", color: "red", textAlign: "center", fontWeight: "bold" }}>
+            {error}
           </div>
         )}
       </div>

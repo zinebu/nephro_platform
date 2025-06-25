@@ -12,28 +12,27 @@ export default function ConnexionPatient() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-// EXEMPLE dans Login.js, après un login réussi :
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post("http://localhost:8000/login", { 
-        email:form.email, 
-        password:form.password 
-    });
-    if (res.data.success) {
-      // On stocke le nom et prénom pour réutiliser
-      localStorage.setItem("nom", res.data.nom);
-      localStorage.setItem("prenom", res.data.prenom);
-      // On redirige vers le menu
-      navigate("/menu");
-    } else {
-      setError(res.data.message || "Erreur");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:8000/login", { 
+        email: form.email, 
+        password: form.password 
+      });
+      if (res.data.success) {
+        // On stocke l'email (important pour la prédiction)
+        localStorage.setItem("email", form.email);  // <-- C'est ça qu'il faut absolument !
+        // Optionnel: nom et prénom pour le menu d'accueil
+        localStorage.setItem("nom", res.data.nom || "");
+        localStorage.setItem("prenom", res.data.prenom || "");
+        navigate("/menu"); // Ou "/predict" si tu vas direct à la prédiction
+      } else {
+        setError(res.data.message || "Erreur");
+      }
+    } catch (err) {
+      setError("Erreur de connexion");
     }
-  } catch (err) {
-    setError("Erreur de connexion");
-  }
-};
-
+  };
 
   return (
     <div style={{
