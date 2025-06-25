@@ -8,6 +8,8 @@ from Routes.assistant_routes import assistant_router
 from Routes.Auth_routes import register_router
 from Routes.login_routes import login_router
 from Routes.history_routes import router as history_router
+from Routes.patient_routes import router_patient
+
 
 
 
@@ -34,4 +36,5 @@ app.include_router(router_predict_risk)
 app.include_router(router_prédire)
 app.include_router(register_router)
 app.include_router(login_router)
+app.include_router(router_patient)
 
