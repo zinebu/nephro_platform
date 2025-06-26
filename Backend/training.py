@@ -2,12 +2,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline
+from imblearn.pipeline import Pipeline  # et non sklearn.pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 import joblib
+from imblearn.over_sampling import SMOTE
 # 1. Charger le dataset
 df = pd.read_excel("data/kidney_disease.xlsx")
 
@@ -30,6 +31,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 # 6. Pipeline Random Forest (imputation + RF)
 rf_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="mean")),
+    ("smote", SMOTE(random_state=42)),
     ("rf", RandomForestClassifier(n_estimators=100, random_state=42))
 ])
 
