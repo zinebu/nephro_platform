@@ -30,15 +30,21 @@ The platform integrates a **FastAPI backend**, a **React frontend**, and a **Pos
 
 ## How to Run
 
-### Backend
+
 ```bash
-cd backend
+
 python -m venv .venv
 # Activate:
 # Windows → .venv\Scripts\activate
 # macOS/Linux → source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn src.app:app --reload
+##Backend
+cd Backend
+python -m uvicorn app:app --reload
+
+##Frontend
+cd Frontend
+npm start
 
 ## Installation
 
