@@ -1,7 +1,7 @@
 # RENALYS
 
 **RENALYS** is an intelligent medical web application designed to assist healthcare professionals in **detecting kidney diseases** using **machine learning**.  
-The platform integrates a **FastAPI backend**, a **React frontend**, and a **PostgreSQL database** to manage patient data and AI-based predictions.
+The platform integrates a **Flask backend**, **Fastapi Microservices** a **React frontend**, and a **PostgreSQL database** to manage patient data and AI-based predictions.
 
 > 👥 Collaborative project developed by [@salmaayache22](https://github.com/salmaayache22) and [@zinebu](https://github.com/zinebu)
 
@@ -27,6 +27,14 @@ The platform integrates a **FastAPI backend**, a **React frontend**, and a **Pos
   
 
 ---
+## Installation
+git clone https://github.com/zinebu/nephro_platform
+
+1. **Cloner le projet :**
+
+   ```bash
+   git clone <URL_DU_REPO>
+   cd nephro_platform
 
 ## How to Run
 
@@ -46,10 +54,3 @@ python -m uvicorn app:app --reload
 cd Frontend
 npm start
 
-## Installation
-
-1. **Cloner le projet :**
-
-   ```bash
-   git clone <URL_DU_REPO>
-   cd nephro_platform
