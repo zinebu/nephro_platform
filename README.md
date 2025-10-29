@@ -32,7 +32,7 @@ The platform integrates a **Flask backend**, **Fastapi Microservices** a **React
 1. **Cloner le projet :**
 
    ```bash
-git clone https://github.com/zinebu/nephro_platform
+    git clone https://github.com/zinebu/nephro_platform
 
 ## How to Run
 
